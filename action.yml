@@ -1,0 +1,24 @@
+name: 'Generate a Debian package changelog entry'
+description: 'Generates a Debian package changelog entry for automatic package building'
+inputs:
+  fullname:
+    description: Name to be used in changelog
+    required: true
+  email:
+    description: Email to be used in changelog
+    required: true
+  distro:
+    description: Distribution to build for
+    required: true
+
+runs:
+  using: docker
+  image: Dockerfile
+  args:
+  - ${{ inputs.fullname }}
+  - ${{ inputs.email }}
+  - ${{ inputs.distro }}
+
+branding:
+  icon: upload-cloud
+  color: yellow
