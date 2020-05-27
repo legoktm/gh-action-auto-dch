@@ -22,10 +22,16 @@ import re
 import subprocess
 
 
-def base_version():
+def is_release() -> bool:
+    return os.environ.get('GITHUB_REF', '').startswith('refs/tags/')
+
+
+def base_version() -> str:
     """Base version for new changelog entry"""
-    if 'NEW_VERSION' in os.environ:
-        return os.environ['NEW_VERSION']
+    if is_release():
+        # Tag, use that as the version string
+        return os.environ['GITHUB_REF'].split('/', 3)[2]
+    # Get version from meson config
     if os.path.exists('meson.build'):
         with open('meson.build') as f:
             meson = f.read()
@@ -33,11 +39,13 @@ def base_version():
         search = re.search(r"version : '(.*?)',", meson)
         if search:
             return search.group(1)
+    # Get version from debian/changelog
     try:
         version = subprocess.check_output(['dpkg-parsechangelog', '-S', 'version']).strip().decode()
         return version.split('~')[0]
     except subprocess.CalledProcessError:
         pass
+    # Fallback to zero
     return '0.0.0'
 
 
@@ -50,13 +58,16 @@ def git_version():
 
 
 def main():
-    base = base_version()
-    git = git_version()
+    version = base_version()
+    if not is_release():
+        # Add git info to version
+        version += '~' + git_version()
     distro = os.getenv('INPUT_DISTRO')
-    new_version = f'{base}~{git}~{distro}'
+    # Always append distro info
+    version += f'~{distro}'
     subprocess.check_call([
         'dch',
-        '--newversion', new_version,
+        '--newversion', version,
         '--distribution', distro,
         'New automated build'
     ], env={
