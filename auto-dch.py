@@ -57,12 +57,20 @@ def git_version():
     return f'git{dt}.{sha1}'
 
 
+def get_distro() -> str:
+    env = os.getenv('INPUT_DISTRO')
+    # If it starts with "debian-" or "ubuntu-" strip that
+    if env.startswith(('debian-', 'ubuntu-')):
+        env = env.split('-', 1)[1]
+    return env
+
+
 def main():
     version = base_version()
     if not is_release():
         # Add git info to version
         version += '~' + git_version()
-    distro = os.getenv('INPUT_DISTRO')
+    distro = get_distro()
     # Always append distro info
     version += f'~{distro}'
     subprocess.check_call([
