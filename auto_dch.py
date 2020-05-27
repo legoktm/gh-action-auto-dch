@@ -41,7 +41,8 @@ def base_version() -> str:
             return search.group(1)
     # Get version from debian/changelog
     try:
-        version = subprocess.check_output(['dpkg-parsechangelog', '-S', 'version']).strip().decode()
+        version = subprocess.check_output(
+            ['dpkg-parsechangelog', '-S', 'version']).strip().decode()
         return version.split('~')[0]
     except subprocess.CalledProcessError:
         pass
@@ -50,9 +51,11 @@ def base_version() -> str:
 
 
 def git_version() -> str:
-    unix = subprocess.check_output(['git', 'log', '--format=%ct', '-n1']).strip().decode()
+    unix = subprocess.check_output(
+        ['git', 'log', '--format=%ct', '-n1']).strip().decode()
     dt = datetime.datetime.fromtimestamp(int(unix)).strftime('%Y%m%d%H%M')
-    sha1 = subprocess.check_output(['git', 'log', '--format=%h', '-n1']).strip().decode()
+    sha1 = subprocess.check_output(
+        ['git', 'log', '--format=%h', '-n1']).strip().decode()
     # Timestamp first so versions are always increasing, then commit sha1
     return f'git{dt}.{sha1}'
 
@@ -88,4 +91,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
