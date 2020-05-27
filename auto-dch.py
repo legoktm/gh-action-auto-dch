@@ -49,7 +49,7 @@ def base_version() -> str:
     return '0.0.0'
 
 
-def git_version():
+def git_version() -> str:
     unix = subprocess.check_output(['git', 'log', '--format=%ct', '-n1']).strip().decode()
     dt = datetime.datetime.fromtimestamp(int(unix)).strftime('%Y%m%d%H%M')
     sha1 = subprocess.check_output(['git', 'log', '--format=%h', '-n1']).strip().decode()
@@ -73,6 +73,7 @@ def main():
     distro = get_distro()
     # Always append distro info
     version += f'~{distro}'
+    print(f'New version: {version}')
     subprocess.check_call([
         'dch',
         '--newversion', version,
