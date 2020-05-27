@@ -46,7 +46,7 @@ def git_version():
     dt = datetime.datetime.fromtimestamp(int(unix)).strftime('%Y%m%d%H%M')
     sha1 = subprocess.check_output(['git', 'log', '--format=%h', '-n1']).strip().decode()
     # Timestamp first so versions are always increasing, then commit sha1
-    return '~git{}.{}'.format(dt, sha1)
+    return f'~git{dt}.{sha1}'
 
 
 def main():
