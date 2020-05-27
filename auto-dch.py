@@ -46,15 +46,18 @@ def git_version():
     dt = datetime.datetime.fromtimestamp(int(unix)).strftime('%Y%m%d%H%M')
     sha1 = subprocess.check_output(['git', 'log', '--format=%h', '-n1']).strip().decode()
     # Timestamp first so versions are always increasing, then commit sha1
-    return f'~git{dt}.{sha1}'
+    return f'git{dt}.{sha1}'
 
 
 def main():
-    new_version = '{}{}'.format(base_version(), git_version())
+    base = base_version()
+    git = git_version()
+    distro = os.getenv('INPUT_DISTRO')
+    new_version = f'{base}~{git}~{distro}'
     subprocess.check_call([
         'dch',
         '--newversion', new_version,
-        '--distribution', os.getenv('INPUT_DISTRO'),
+        '--distribution', distro,
         'New automated build'
     ], env={
         'DEBEMAIL': os.getenv('INPUT_EMAIL'),
