@@ -1,4 +1,4 @@
-FROM docker.pkg.github.com/legoktm/gh-action-images/auto-dch:latest
+FROM legoktm/gh-action-auto-dch:latest
 
 COPY auto_dch.py /auto_dch.py
 
