@@ -18,7 +18,10 @@ distro appended. E.g. `2.1.2~buster`.
 On normal commit pushes, the base version will be read from a meson.build if
 it exists, then the previous `debian/changelog` entry, otherwise falling back
 to `0.0.0`. The git timestamp and hash will be appended, along with distro.
-E.g. `2.1.2~git202005272117.a2e10b9~buster`.
+E.g. `2.1.2+git202005272117.a2e10b9~buster`.
+
+The expectation is that the base version is from the previous release, so the
+package version is <XX commits> ahead of <base version>.
 
 ## Example
 

@@ -72,7 +72,7 @@ def main():
     version = base_version()
     if not is_release():
         # Add git info to version
-        version += '~' + git_version()
+        version += '+' + git_version()
     distro = get_distro()
     # Always append distro info
     version += f'~{distro}'
