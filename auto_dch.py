@@ -39,6 +39,14 @@ def base_version() -> str:
         search = re.search(r"version : '(.*?)',", meson)
         if search:
             return search.group(1)
+    # Get version from kiwix-desktop.pro
+    # FIXME: Use some non-Kiwix specific method for doing this
+    if os.path.exists('kiwix-desktop.pro'):
+        with open('kiwix-desktop.pro') as f:
+            pro = f.read()
+        search = re.search(r'VERSION="(.*?)"', pro)
+        if search:
+            return search.group(1)
     # Get version from debian/changelog
     try:
         version = subprocess.check_output(
