@@ -69,7 +69,7 @@ def git_version() -> str:
 
 
 def get_distro() -> str:
-    env = os.environ['INPUT_DISTRO']
+    env = os.environ['INPUT_DISTRO'].replace(':', '-')
     # If it starts with "debian-" or "ubuntu-" strip that
     if env.startswith(('debian-', 'ubuntu-')):
         env = env.split('-', 1)[1]
