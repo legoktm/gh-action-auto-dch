@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Copyright 2020 Kunal Mehta <legoktm@member.fsf.org>
+Copyright 2020, 2024 Kunal Mehta <legoktm@debian.org>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -69,7 +69,7 @@ def git_version() -> str:
 
 
 def get_distro() -> str:
-    env = os.getenv('INPUT_DISTRO')
+    env = os.environ['INPUT_DISTRO']
     # If it starts with "debian-" or "ubuntu-" strip that
     if env.startswith(('debian-', 'ubuntu-')):
         env = env.split('-', 1)[1]
@@ -91,10 +91,15 @@ def main():
         '--distribution', distro,
         'New automated build'
     ], env={
-        'DEBEMAIL': os.getenv('INPUT_EMAIL'),
-        'DEBFULLNAME': os.getenv('INPUT_FULLNAME')
+        'DEBEMAIL': os.environ['INPUT_EMAIL'],
+        'DEBFULLNAME': os.environ['INPUT_FULLNAME']
     })
-    subprocess.check_call(['git', 'commit', '-a', '-m', 'New automated build'])
+    subprocess.check_call([
+        'git',
+        "-c", f"user.name={os.environ['INPUT_FULLNAME']}",
+        "-c", f"user.email={os.environ['INPUT_EMAIL']}",
+        'commit', '-a', '-m', 'New automated build'
+    ])
 
 
 if __name__ == '__main__':

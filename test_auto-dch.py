@@ -23,7 +23,7 @@ import auto_dch
 
 
 @pytest.mark.parametrize('value,expected', (
-    ('refs/heads/master', False),
+    ('refs/heads/main', False),
     ('refs/tags/1.0.0', True),
     ('', False),
 ))

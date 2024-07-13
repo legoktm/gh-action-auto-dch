@@ -32,12 +32,12 @@ jobs:
   build-deb:
     runs-on: ubuntu-latest
     strategy:
-      matrix: 
+      matrix:
         distro: [debian-buster, ubuntu-focal]
     steps:
       - uses: actions/checkout@v2
 
-      - uses: legoktm/gh-action-auto-dch@master
+      - uses: legoktm/gh-action-auto-dch@main
         with:
           fullname: First Last
           email: firstlast@example.org
